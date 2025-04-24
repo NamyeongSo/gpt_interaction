@@ -1,6 +1,10 @@
 # GPT-4o-mini Chat Web Interface
 
 A simple web application for interacting with OpenAI's GPT-4o-mini model, with support for system prompts and dialog history.
+- requirement install
+- .env파일에 openai api key 입력
+- \TACT_interraction_datas\multiwoz 폴더 하단에 자신 이름의 json 파일 위치하게 하기(현재는 nyso파일이 위치함)
+- python app.py로 실행
 
 ## Features
 
