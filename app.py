@@ -22,97 +22,33 @@ app.secret_key = os.getenv("SECRET_KEY", "default-secret-key")
 # Initialize OpenAI client
 client = openai.OpenAI(api_key=api_key)
 
-# Hard-coded sample data structure from TACT_MultiWOZ_nyso_guide.json
-NYSO_DATA = {
-    "PMUL3156.json": {
-        "guideline": """0 [USER] [find_restaurant] I'm trying to find information about a particular restaurant called Ian Hong house.
-1 [SYSTEM] 
-2 [USER] [find_restaurant] 
-3 [SYSTEM] 
-4 [USER] [find_restaurant] 
-5 [SYSTEM] 
-6 [USER] [chitchat] Oh, I love Chinese food! Do you know if they have any good vegetarian options?
-7 [SYSTEM] 
-8 [USER] [chitchat] 
-9 [SYSTEM] [Transition to ToD] 
-10 [USER] [book_hotel] 8 people. 5 nights, starting from Wednesday. Please give me the reference number, please.
-11 [SYSTEM] 
-12 [USER] [book_taxi] I would like to book a taxi from the Hong House to the hotel leaving by 10:15.
-13 [SYSTEM] 
-14 [USER] [NONE] Wonderful, thank you for everything.
-15 [SYSTEM] 
-16 [USER] [book_taxi] One more thing. Can you please give me the taxi contact number?
-17 [SYSTEM] """,
-        "generated_data": """0 [USER] [find_restaurant] I'm trying to find information about a particular restaurant called Ian Hong house.
-1 [SYSTEM] Our records don't show that hotel. Sorry.
-2 [USER] [find_restaurant] Are you sure you don't have anything on Ian Hong House? I need the address and postcode.
-3 [SYSTEM] Yes, I am sure. There is no Ian Hong House restaurant in our system.
-4 [USER] [find_restaurant] Can you please check again? Lan Hong House.
-5 [SYSTEM] Sorry about that! I found the Lan Hong House at 12 Norfolk Street City Centre, CB1 2LF. It's a moderately-priced Chinese restaurant.
-6 [USER] [chitchat] Oh, I love Chinese food! Do you know if they have any good vegetarian options?
-7 [SYSTEM] That's great to hear! Many Chinese restaurants do offer a variety of vegetarian dishes, so you should find some tasty options at Lan Hong House.
-8 [USER] [chitchat] Perfect! I always appreciate a good veggie dish. By the way, can I also get help booking a room at the Huntingdon Marriott Hotel, please?
-9 [SYSTEM] [Transition to ToD] Sure! For what length of stay and how many people, please?
-10 [USER] [book_hotel] 8 people. 5 nights, starting from Wednesday. Please give me the reference number, please.
-11 [SYSTEM] Your booking was successful. The reference number is: USRCWCJ 0. Can I help you with anything else?
-12 [USER] [book_taxi] I would like to book a taxi from the Hong House to the hotel leaving by 10:15.
-13 [SYSTEM] No problem. I booked a red Audi that will pick you up by 10:15.
-14 [USER] [NONE] Wonderful, thank you for everything.
-15 [SYSTEM] Have a great trip! Thank you for contacting us for all your booking needs. Enjoy your trip!
-16 [USER] [book_taxi] One more thing. Can you please give me the taxi contact number?
-17 [SYSTEM] Sure! The contact number is 07686386258. The car will be a red Audi."""
-    },
-    "PMUL2296.json": {
-        "guideline": """0 [USER] [find_restaurant] Hello, I can't wait to try some local restaurants when I travel there next week. I could use some help with places to go in town though.
-1 [SYSTEM] 
-2 [USER] [find_attraction] Actually, is there a place in town that offers nice architecture to see?
-3 [SYSTEM] 
-4 [USER] [find_restaurant] I want a place that has Latin food.
-5 [SYSTEM] 
-6 [USER] [find_restaurant] 
-7 [SYSTEM] 
-8 [USER] [book_restaurant] Yes, I would like to reserve a table for a party of 8 at 16:00 on Friday. I've also got another question when you're done with that. Thank you.
-9 [SYSTEM] 
-10 [USER] [book_restaurant] 
-11 [SYSTEM] 
-12 [USER] [book_taxi] I would like a cab to and from both places please make sure it is on time so I don't miss my reservation, contact # & car type.
-13 [SYSTEM] 
-14 [USER] [find_attraction] I will be leaving from the restaurant.
-15 [SYSTEM] 
-16 [USER] [find_attraction] 
-17 [SYSTEM] 
-18 [USER] [find_attraction] 
-19 [SYSTEM] 
-20 [USER] [chitchat] That sounds fine! By the way, I really enjoy visiting places with unique designs. Do you know if there are any other interesting architectural spots nearby?
-21 [SYSTEM] 
-22 [USER] [book_taxi] Can you get me a taxi from there to the restaurant? I'll need to arrive by 16:00 for my reservation.
-23 [SYSTEM] """,
-        "generated_data": """0 [USER] [find_restaurant] Hello, I can't wait to try some local restaurants when I travel there next week. I could use some help with places to go in town though.
-1 [SYSTEM] I'm certain we can help with that. Do you have a price range, part of town or what kind of food you'll want to eat?
-2 [USER] [find_attraction] Actually, is there a place in town that offers nice architecture to see?
-3 [SYSTEM] There is a moderate priced Asian restaurant in the centre called Yippee Noodle Bar that's around beautiful places. Would you like to try that?
-4 [USER] [find_restaurant] I want a place that has Latin food.
-5 [SYSTEM] I'm very sorry I am finding no results for restaurants serving Latin food. Is there another type of cuisine you'd be interested in?
-6 [USER] [find_restaurant] How about some Vietnamese food in the west then?
-7 [SYSTEM] I have the Thanh Binh restaurant located at 17 Magdalene Street City Centre. Would you like reservations?
-8 [USER] [book_restaurant] Yes, I would like to reserve a table for a party of 8 at 16:00 on Friday. I've also got another question when you're done with that. Thank you.
-9 [SYSTEM] Booking was successful. The table will be reserved for 15 minutes. Reference number is: Q4NHOJRD. What was the other question?
-10 [USER] [book_restaurant] You must be a mind reader, my question was the reference number! Thank you.
-11 [SYSTEM] You're very welcome! Is there anything else I can help you with?
-12 [USER] [book_taxi] I would like a cab to and from both places please make sure it is on time so I don't miss my reservation, contact # & car type.
-13 [SYSTEM] What place will you be leaving from?
-14 [USER] [find_attraction] I will be leaving from the restaurant.
-15 [SYSTEM] Well, you didn't suggest any attractions, you see. What would you suggest, then I can schedule my cab after that?
-16 [USER] [find_attraction] My apologies! My wife loves architecture and insisted I find a place, glad I didn't forget. Any area's fine, but what about the same as the restaurant?
-17 [SYSTEM] Is there a price range would you like?
-18 [USER] [find_attraction] I'd like a place to go to in the category of architecture, preferably free.
-19 [SYSTEM] All Saints Church is free and located on Jesus Lane.
-20 [USER] [chitchat] That sounds fine! By the way, I really enjoy visiting places with unique designs. Do you know if there are any other interesting architectural spots nearby?
-21 [SYSTEM] Oh, there are definitely some unique spots! The University of Cambridge has some stunning buildings, like the King's College Chapel, which is a must-see.
-22 [USER] [book_taxi] Can you get me a taxi from there to the restaurant? I'll need to arrive by 16:00 for my reservation.
-23 [SYSTEM] Your taxi has been booked. You will be picked up in a white Volvo. The contact number is 07266032951. May I be of further assistance today?"""
-    }
+# Configuration settings
+CONFIG = {
+    "openai_model": os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
+    "max_tokens": int(os.getenv("MAX_TOKENS", "1000")),
+    "temperature": float(os.getenv("TEMPERATURE", "0")),
+    "top_p": float(os.getenv("TOP_P", "0")),
+    "data_dir": os.getenv("DATA_DIR", "TACT_interraction_datas/multiwoz"),
+                    "main_data_file": os.getenv("MAIN_DATA_FILE", "TACT_MultiWOZ_yjyoon_guide.json.json")
 }
+
+# Load sample data if needed (fallback when file loading fails)
+def load_sample_data():
+    sample_file = os.getenv("SAMPLE_DATA_FILE", "sample_data.json")
+    sample_path = Path(sample_file)
+    
+    if sample_path.exists():
+        try:
+            with open(sample_path, 'r', encoding='utf-8-sig') as f:
+                return json.load(f)
+        except Exception as e:
+            print(f"Error loading sample data file: {str(e)}")
+    
+    # Return empty dictionary if no sample data available
+    return {}
+
+# Sample data as fallback
+SAMPLE_DATA = load_sample_data()
 
 # Load JSON file and extract available dialogue IDs
 def load_json_data_and_extract_ids():
@@ -120,7 +56,7 @@ def load_json_data_and_extract_ids():
     
     try:
         # First try to load from the JSON file
-        nyso_file_path = Path('TACT_interraction_datas/multiwoz/TACT_MultiWOZ_nyso_guide.json')
+        nyso_file_path = Path(os.path.join(CONFIG["data_dir"], CONFIG["main_data_file"]))
         
         if nyso_file_path.exists():
             try:
@@ -143,16 +79,16 @@ def load_json_data_and_extract_ids():
     except Exception as e:
         print(f"Error during file loading: {str(e)}")
     
-    # If no IDs were loaded, use hardcoded sample data
-    if not dialogue_ids:
-        print("Using hardcoded sample data")
-        for dialogue_id in NYSO_DATA.keys():
+    # If no IDs were loaded, use sample data
+    if not dialogue_ids and SAMPLE_DATA:
+        print("Using sample data")
+        for dialogue_id in SAMPLE_DATA.keys():
             # Clean dialogue ID
             clean_id = dialogue_id.replace('.json', '')
             dialogue_ids.append({
                 'id': clean_id,
-                'file_path': 'hardcoded',
-                'file_name': 'NYSO Sample Data'
+                'file_path': 'sample_data',
+                'file_name': 'Sample Data'
             })
     
     print(f"Total dialogue IDs available: {len(dialogue_ids)}")
@@ -160,14 +96,14 @@ def load_json_data_and_extract_ids():
 
 # Get data for a specific dialogue ID
 def get_dialogue_data(dialogue_id, file_path):
-    # Try to get data from the hardcoded sample first for quick testing
-    if dialogue_id in NYSO_DATA or dialogue_id + '.json' in NYSO_DATA:
-        key = dialogue_id if dialogue_id in NYSO_DATA else dialogue_id + '.json'
-        print(f"Using hardcoded data for {key}")
-        return NYSO_DATA[key], True
+    # Try to get data from the sample data first for quick testing
+    if SAMPLE_DATA and (dialogue_id in SAMPLE_DATA or dialogue_id + '.json' in SAMPLE_DATA):
+        key = dialogue_id if dialogue_id in SAMPLE_DATA else dialogue_id + '.json'
+        print(f"Using sample data for {key}")
+        return SAMPLE_DATA[key], True
     
-    # If not in hardcoded data, try to load from file
-    if file_path != 'hardcoded' and Path(file_path).exists():
+    # If not in sample data, try to load from file
+    if file_path != 'sample_data' and Path(file_path).exists():
         try:
             with open(file_path, 'r', encoding='utf-8-sig') as f:
                 data = json.load(f)
@@ -186,11 +122,11 @@ def get_dialogue_data(dialogue_id, file_path):
         except Exception as e:
             print(f"Error reading file {file_path}: {str(e)}")
     
-    # Fallback to default data if dialogue ID is not found
-    if 'PMUL3156' in NYSO_DATA or 'PMUL3156.json' in NYSO_DATA:
-        key = 'PMUL3156.json'  # Default to this dialogue
-        print(f"Using default hardcoded data for {key}")
-        return NYSO_DATA[key], False
+    # Fallback to first available dialogue in sample data if dialogue ID is not found
+    if SAMPLE_DATA and len(SAMPLE_DATA) > 0:
+        first_key = next(iter(SAMPLE_DATA))
+        print(f"Using default sample data for {first_key}")
+        return SAMPLE_DATA[first_key], False
     else:
         # Ultimate fallback
         return {
@@ -204,7 +140,8 @@ def extract_sample_dialogs(data_string):
     sample_dialogs = []
     
     # Process first three turns (pairs of lines)
-    for i in range(0, min(6, len(lines)), 2):
+    max_turns = int(os.getenv("MAX_SAMPLE_TURNS", "3"))
+    for i in range(0, min(max_turns * 2, len(lines)), 2):
         if i+1 < len(lines):
             user_line = lines[i]
             system_line = lines[i+1]
@@ -307,11 +244,11 @@ def chat():
     try:
         # Call OpenAI API
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model=CONFIG["openai_model"],
             messages=messages,
-            temperature=0,
-            top_p=0,
-            max_tokens=1000
+            temperature=CONFIG["temperature"],
+            top_p=CONFIG["top_p"],
+            max_tokens=CONFIG["max_tokens"]
         )
         
         # Extract assistant response
@@ -336,4 +273,9 @@ def clear_history():
     return jsonify({"status": "success", "messages": []})
 
 if __name__ == '__main__':
-    app.run(debug=True) 
+    debug_mode = os.getenv("FLASK_DEBUG", "True").lower() in ["true", "1", "yes"]
+    app.run(
+        host=os.getenv("FLASK_HOST", "0.0.0.0"),
+        port=int(os.getenv("FLASK_PORT", "5000")),
+        debug=debug_mode
+    )
