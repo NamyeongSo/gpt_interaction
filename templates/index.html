@@ -217,6 +217,7 @@
             
             <div class="d-flex justify-content-between">
                 <button class="btn btn-danger" id="clearHistoryBtn">Clear Chat History</button>
+                <button class="btn btn-success" id="saveHistoryBtn">Save Dialogue History</button>
                 <button class="btn btn-primary" id="sendBtn">Send</button>
             </div>
         </div>
@@ -229,6 +230,7 @@
             const userPromptInput = document.getElementById('userPrompt');
             const sendBtn = document.getElementById('sendBtn');
             const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+            const saveHistoryBtn = document.getElementById('saveHistoryBtn');
             const chatHistory = document.getElementById('chatHistory');
             const loading = document.getElementById('loading');
             
@@ -329,6 +331,35 @@
                         alert('An error occurred while clearing history.');
                     });
                 }
+            });
+            
+            // Save dialogue history
+            saveHistoryBtn.addEventListener('click', function() {
+                // Get the current dialogue ID from the select element
+                const dialogueSelect = document.querySelector('select[name="dialogue_id"]');
+                const selectedDialogueId = dialogueSelect.value;
+                
+                fetch('/api/save-history', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        dialogue_id: selectedDialogueId
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        alert('Dialogue history saved successfully!');
+                    } else {
+                        alert('Error: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while saving dialogue history.');
+                });
             });
         });
     </script>

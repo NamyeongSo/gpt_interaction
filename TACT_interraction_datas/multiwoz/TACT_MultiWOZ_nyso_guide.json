@@ -15,7 +15,17 @@
       "book_taxi"
     ],
     "number_of_turns": 24,
-    "guideline": "0 [USER] [find_restaurant] Hello, I can't wait to try some local restaurants when I travel there next week. I could use some help with places to go in town though.\n1 [SYSTEM] \n2 [USER] [find_attraction] Actually, is there a place in town that offers nice architecture to see?\n3 [SYSTEM] \n4 [USER] [find_restaurant] I want a place that has Latin food.\n5 [SYSTEM] \n6 [USER] [find_restaurant] \n7 [SYSTEM] \n8 [USER] [book_restaurant] Yes, I would like to reserve a table for a party of 8 at 16:00 on Friday. I've also got another question when you're done with that. Thank you.\n9 [SYSTEM] \n10 [USER] [book_restaurant] \n11 [SYSTEM] \n12 [USER] [book_taxi] I would like a cab to and from both places please make sure it is on time so I don't miss my reservation, contact # & car type.\n13 [SYSTEM] \n14 [USER] [find_attraction] I will be leaving from the restaurant.\n15 [SYSTEM] \n16 [USER] [find_attraction] \n17 [SYSTEM] \n18 [USER] [find_attraction] \n19 [SYSTEM] \n20 [USER] [chitchat] That sounds fine! By the way, I really enjoy visiting places with unique designs. Do you know if there are any other interesting architectural spots nearby?\n21 [SYSTEM] \n22 [USER] [book_taxi] Can you get me a taxi from there to the restaurant? I'll need to arrive by 16:00 for my reservation.\n23 [SYSTEM] "
+    "guideline": "0 [USER] [find_restaurant] Hello, I can't wait to try some local restaurants when I travel there next week. I could use some help with places to go in town though.\n1 [SYSTEM] \n2 [USER] [find_attraction] Actually, is there a place in town that offers nice architecture to see?\n3 [SYSTEM] \n4 [USER] [find_restaurant] I want a place that has Latin food.\n5 [SYSTEM] \n6 [USER] [find_restaurant] \n7 [SYSTEM] \n8 [USER] [book_restaurant] Yes, I would like to reserve a table for a party of 8 at 16:00 on Friday. I've also got another question when you're done with that. Thank you.\n9 [SYSTEM] \n10 [USER] [book_restaurant] \n11 [SYSTEM] \n12 [USER] [book_taxi] I would like a cab to and from both places please make sure it is on time so I don't miss my reservation, contact # & car type.\n13 [SYSTEM] \n14 [USER] [find_attraction] I will be leaving from the restaurant.\n15 [SYSTEM] \n16 [USER] [find_attraction] \n17 [SYSTEM] \n18 [USER] [find_attraction] \n19 [SYSTEM] \n20 [USER] [chitchat] That sounds fine! By the way, I really enjoy visiting places with unique designs. Do you know if there are any other interesting architectural spots nearby?\n21 [SYSTEM] \n22 [USER] [book_taxi] Can you get me a taxi from there to the restaurant? I'll need to arrive by 16:00 for my reservation.\n23 [SYSTEM] ",
+    "dialogue_history": [
+      {
+        "content": "dad",
+        "role": "user"
+      },
+      {
+        "content": "It seems like you might be looking for something specific related to \"dad.\" Are you looking for advice, quotes, stories, or something else? Let me know how I can help!",
+        "role": "agent"
+      }
+    ]
   },
   "PMUL3156.json": {
     "split": "test",
